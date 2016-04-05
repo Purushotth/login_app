@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+<title>Personify financial</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{% static 'style.css' %}" rel="stylesheet" type='text/css'>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+body {background-color:lightblue;}
+</style>
+</head>
+<body>
+	<div class='container'>
+		<h2><u>Login form:</u></h2>
+		<form class='form-horizontal' role='form' id='loginform' action='' method='post'>
+		{% csrf_token %}
+			<div class='form-group'>
+				<label class='control-label col-sm-2' for="id_{{ form.Last_Name.label }}">{{ form.Last_Name.name }}:</label>
+				<div class='col-sm-5'>
+					{{ form.Last_Name }}
+				</div>
+			</div>
+			<div class='form-group'>
+                                <label class='control-label col-sm-2' for="id_{{ form.EmailID.label }}">{{ form.EmailID.name }}:</label>
+				<div class='col-sm-5'>
+					{{ form.EmailID }}
+				</div>
+			</div>
+			<div class='form-group'>
+                                <label class='control-label col-sm-2' for="id_{{ form.SSN.label }}">{{ form.SSN.name }}:</label>
+				<div class='col-sm-5'>
+					{{ form.SSN }}
+				</div>
+			</div>
+			{% if not Credentials %}
+			<span class="error col-sm-offset-1 col-sm-5">
+			Invalid Credentials
+			</span>
+			{% endif %}
+                        {% if not Loggedin and Credentials %}
+                        <span class="error col-sm-offset-1 col-sm-5">
+                        You are Logged Out!! Please Login again!!
+                        </span>
+                        {% endif %}
+
+			<div class='form-group'>
+				<div class='col-sm-offset-2 col-sm-10'>
+					<button type='submit' class='btn btn-default' style="background-color:;">Login</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script src="{% static 'assets/js/jquery-1.7.1.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.validate.js' %}"></script>
+	<script>
+		$(document).ready(
+		function(){
+			$('#loginform').validate({
+				rules:		{
+						{{ form.Last_Name.name }}:{required: true,minlength:6,maxlength:45},
+						{{ form.EmailID.name }}:{required: true},
+						{{ form.SSN.name }}:{required: true, minlength:4,maxlength:4},
+						},
+				messages:	{
+						{{ form.Last_Name.name }}:{required: 'Please enter your name'},
+						{{ form.EmailID.name }}:{required:  'Please enter your EmailID'},
+						{{ form.SSN.name }}:{required:  'Please enter your SSN'},
+						},
+
+				highlight: function(element) {
+					$(element).closest('.form-group').removeClass('success').addClass('error');},
+
+				success: function(element) {
+					element.text('OK!').addClass('valid').closest('.form-group').removeClass('error').addClass('success');},
+						})})
+	</script>
+</body>
+</html>
